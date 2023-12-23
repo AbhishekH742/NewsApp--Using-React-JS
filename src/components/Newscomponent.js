@@ -2,91 +2,68 @@ import React, { Component } from 'react'
 import Newsitem from './Newsitem'
 
 export class Newscomponent extends Component {
-  article = [
-
-    {
-      "source": {
-        "id": "msnbc",
-        "name": "MSNBC"
-      },
-      "author": null,
-      "title": "Trump reportedly caught pressuring MI officials on 2020 in newly revealed audio",
-      "description": "MSNBC's Ali Velshi speaks to Craig Mauger, state politics reporter for The Detroit News, who says he's heard newly revealed audio recordings of Trump pressuring Michigan officials not to certify Biden's 2020 win in that state.",
-      "url": "https://www.msnbc.com/the-last-word/watch/trump-reportedly-caught-pressuring-mi-officials-on-2020-in-newly-revealed-audio-200776261596",
-      "urlToImage": "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/mpx/2704722219/2023_12/1703215409224_n_lw_mauger_231221_1920x1080-fcdsfr.jpg",
-      "publishedAt": "2023-12-22T03:23:48Z",
-      "content": null
-    },
-    {
-      "source": {
-        "id": "the-hill",
-        "name": "The Hill"
-      },
-      "author": "Sarah Fortinsky",
-      "title": "Manchin launches new political organization, listening tour",
-      "description": "Sen. Joe Manchin (D-W.Va.) is set to kick off his new organization's listening tour next month, with a speaking engagement at the New England Council and the New Hampshire Institute of Politics event on Jan. 12. The two groups announced on Thursday that Manch…",
-      "url": "https://thehill.com/homenews/campaign/4372910-manchin-launches-new-political-organization-listening-tour/",
-      "urlToImage": "https://thehill.com/wp-content/uploads/sites/2/2023/09/manchinjoe_090523gn05_w.jpg?w=1280",
-      "publishedAt": "2023-12-22T03:14:13Z",
-      "content": "Skip to content\r\nSen. Joe Manchin (D-W.Va.) is set to kick off his new organization's listening tour next month, with a speaking engagement at the New England Council and the New Hampshire Institute … [+1691 chars]"
-    },
-    {
-      "source": {
-        "id": "business-insider",
-        "name": "Business Insider"
-      },
-      "author": "Lloyd Lee",
-      "title": "Why GOP voters filed lawsuit that kicked Trump off Colorado's ballot",
-      "description": "Some of the petitioners in the lawsuit that threatens Donald Trump's placement on the ballots have played prominent roles in Colorado politics.",
-      "url": "http://www.businessinsider.com/republicans-gop-voters-lawsuit-disqualifying-trump-colorado-ballot-supreme-court-2023-12",
-      "urlToImage": "https://i.insider.com/6584e359a79e5746976c8c81?width=1200&format=jpeg",
-      "publishedAt": "2023-12-22T03:12:05Z",
-      "content": "The Colorado Supreme Court took extraordinary steps on Tuesday to remove Donald Trump from the state's 2024 primary ballot in a ruling that was quickly condemned by Republican lawmakers and is now po… [+3210 chars]"
-    },
-    {
-      "source": {
-        "id": "fox-news",
-        "name": "Fox News"
-      },
-      "author": "Brooke Singman",
-      "title": "Former prosecutor accused of limiting questions about Joe Biden denies politics played a role in Hunter probe",
-      "description": "FIRST ON FOX: The former assistant U.S. attorney who allegedly worked to 'limit' questions about Joe Biden denied that politics played a role in the Hunter Biden investigation during her interview at the House Judiciary Committee, according to a transcript re…",
-      "url": "https://www.foxnews.com/politics/former-prosecutor-accused-of-limiting-questions-about-joe-biden-denies-politics-played-a-role-in-hunter-probe",
-      "urlToImage": "https://static.foxnews.com/foxnews.com/content/uploads/2023/12/GettyImages-1845420889.jpg",
-      "publishedAt": "2023-12-22T01:22:07Z",
-      "content": "FIRST ON FOX: The former assistant U.S. attorney who allegedly worked to limit questions about Joe Biden denied that politics played a role in the Hunter Biden investigation during her interview at t… [+7743 chars]"
-    },
-   
-    {
-      "source": {
-        "id": "the-jerusalem-post",
-        "name": "The Jerusalem Post"
-      },
-      "author": null,
-      "title": "Congresswoman Nita Lowey: I am proud to stand with Israel",
-      "description": "Gantz: Security of Israel is above politics; PA: This is a crime.",
-      "url": "https://www.jpost.com/Arab-Israeli-Conflict/Gantz-Security-of-Israel-is-above-politics-Palestinians-This-is-a-crime-607595",
-      "urlToImage": "https://images.jpost.com/image/upload/f_auto,fl_lossy/t_Article2016_ControlFaceDetect/448812",
-      "publishedAt": "2019-11-13T04:41:00Z",
-      "content": "US Ambassador David M. Friedman said the US stands “with our friend and ally Israel at this critical moment” on social media on Tuesday after roughly 170 rockets were fired on Israel from the Gaza St… [+6160 chars]"
-    }
-  ];
+  articles = [ ];
   constructor() {
     super();
     this.state = {
-      article: this.article,
-      loading: false
+      articles: this.articles,
+      loading: false,
+      page: 1
     }
   }
+
+  async componentDidMount() {
+    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=94a298e0b4df4b56940b3b518af7e628&page=1`;
+    let data = await fetch(url);
+    let resolveData = await data.json();
+    // console.log(resolveData);
+    this.setState({ articles: resolveData.articles, totalResults: resolveData.totalResults });
+  }
+
+  handlePrevPage = async () => {
+    let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=94a298e0b4df4b56940b3b518af7e628&page=${this.state.page - 1}&pageSize=20`;
+    let data = await fetch(url);
+    let resolveData = await data.json();
+
+    this.setState({
+      page: this.state.page - 1,
+      articles: resolveData.articles
+    })
+  }
+
+  handleNextPage = async () => {
+    if (this.state.page + 1 > Math.ceil(this.state.totalResults / 21)) {
+
+    }
+    else {
+
+      let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=94a298e0b4df4b56940b3b518af7e628&page=${this.state.page + 1}&pageSize=20`;
+      let data = await fetch(url);
+      let resolveData = await data.json();
+
+      this.setState({
+        page: this.state.page + 1,
+        articles: resolveData.articles
+      })
+    }
+  }
+
+
   render() {
     return (
       <div className='container my-3'>
+        <h1>NewsPiece - Top Headings</h1>
         <div className="row" >
-          {this.state.article.map((element) => {
+          {this.state.articles.map((element) => {
             return <div className="col-md-4" key={element.url}>
-              <Newsitem tittle={element.title.slice(0,40)} description={element.description.slice(0,85)} imgUrl={element.urlToImage} newsUrl={element.url} />
+              <Newsitem tittle={element.title} description={element.description} imgUrl={element.urlToImage} newsUrl={element.url} />
             </div>
           })}
+
+        </div>
+        <div className="conatainer d-flex justify-content-between">
+          <button disabled={this.state.page <= 1} type="button" className="btn btn-dark" onClick={this.handlePrevPage}>&larr; prev</button>
+          <button type="button" className="btn btn-dark" onClick={this.handleNextPage}>next &rarr;</button>
 
         </div>
       </div>
