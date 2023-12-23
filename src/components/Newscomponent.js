@@ -3,19 +3,7 @@ import Newsitem from './Newsitem'
 
 export class Newscomponent extends Component {
   article = [
-    {
-      "source": {
-        "id": "google-news-uk",
-        "name": "Google News (UK)"
-      },
-      "author": "The Guardian",
-      "title": "Rightwing Tory MPs criticise Rishi Sunak's 'weakness' over family visas U-turn - UK politics live - The Guardian",
-      "description": null,
-      "url": "https://news.google.com/rss/articles/CBMijQFodHRwczovL3d3dy50aGVndWFyZGlhbi5jb20vcG9saXRpY3MvbGl2ZS8yMDIzL2RlYy8yMi9yaWdodHdpbmctY29uc2VydmF0aXZlLW1wcy1yaXNoaS1zdW5hay1mYW1pbHktdmlzYS10aHJlc2hvbGQtdWstbWlncmF0aW9uLXBvbGl0aWNzLWxpdmXSAY0BaHR0cHM6Ly9hbXAudGhlZ3VhcmRpYW4uY29tL3BvbGl0aWNzL2xpdmUvMjAyMy9kZWMvMjIvcmlnaHR3aW5nLWNvbnNlcnZhdGl2ZS1tcHMtcmlzaGktc3VuYWstZmFtaWx5LXZpc2EtdGhyZXNob2xkLXVrLW1pZ3JhdGlvbi1wb2xpdGljcy1saXZl?oc=5",
-      "urlToImage": null,
-      "publishedAt": "2023-12-22T09:30:00+00:00",
-      "content": null
-    },
+
     {
       "source": {
         "id": "msnbc",
@@ -68,19 +56,7 @@ export class Newscomponent extends Component {
       "publishedAt": "2023-12-22T01:22:07Z",
       "content": "FIRST ON FOX: The former assistant U.S. attorney who allegedly worked to limit questions about Joe Biden denied that politics played a role in the Hunter Biden investigation during her interview at t… [+7743 chars]"
     },
-    {
-      "source": {
-        "id": "the-american-conservative",
-        "name": "The American Conservative"
-      },
-      "author": null,
-      "title": "Politics Archives - The American Conservative",
-      "description": null,
-      "url": "https://www.theamericanconservative.com/category/politics/",
-      "urlToImage": null,
-      "publishedAt": "2022-07-07T21:37:27.3936289Z",
-      "content": null
-    },
+   
     {
       "source": {
         "id": "the-jerusalem-post",
@@ -105,18 +81,13 @@ export class Newscomponent extends Component {
   render() {
     return (
       <div className='container my-3'>
-        <div className="row">
-          <div className="col-md-4">
-            <Newsitem tittle="Tittle" description="This is description" imgUrl="https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/mpx/2704722219/2023_12/1703215409224_n_lw_mauger_231221_1920x1080-fcdsfr.jpg" />
-          </div>
+        <div className="row" >
+          {this.state.article.map((element) => {
+            return <div className="col-md-4" key={element.url}>
+              <Newsitem tittle={element.title.slice(0,40)} description={element.description.slice(0,85)} imgUrl={element.urlToImage} newsUrl={element.url} />
+            </div>
+          })}
 
-          <div className="col-md-4">
-            <Newsitem tittle="Tittle" description="This is description" imgUrl="https://thehill.com/wp-content/uploads/sites/2/2023/09/manchinjoe_090523gn05_w.jpg?w=1280" />
-          </div>
-
-          <div className="col-md-4">
-            <Newsitem tittle="Tittle" description="This is description" imgUrl="https://i.insider.com/6584e359a79e5746976c8c81?width=1200&format=jpeg" />
-          </div>
         </div>
       </div>
     )
