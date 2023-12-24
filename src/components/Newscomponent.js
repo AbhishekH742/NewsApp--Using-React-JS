@@ -34,16 +34,23 @@ export class Newscomponent extends Component {
   }
 
   async updateNews() {
+    this.props.setProgress(10);
     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=94a298e0b4df4b56940b3b518af7e628&page=${this.state.page}&pageSize=${this.props.pageSize}`;
     this.setState({ loading: true });
     let data = await fetch(url);
+    this.props.setProgress(30);
     let resolveData = await data.json();
+    this.props.setProgress(70);
+
     // console.log(resolveData);
     this.setState({
       articles: resolveData.articles,
       totalResults: resolveData.totalResults,
       loading: false
     });
+    this.props.setProgress(100);
+    
+
   }
 
   async componentDidMount() {
@@ -102,7 +109,7 @@ export class Newscomponent extends Component {
     this.setState({ loading: true });
     let data = await fetch(url);
     let resolveData = await data.json();
-    // console.log(resolveData);
+    
     this.setState({
       articles: this.state.articles.concat(resolveData.articles),
       totalResults: resolveData.totalResults,
@@ -116,7 +123,7 @@ export class Newscomponent extends Component {
       <>
         <div>
           <h1 className='text-center my-5'>NewsPiece - Top {this.capitalizeString(this.props.category)}  Headings</h1>
-          {/* {this.state.loading && <Loading />} */}
+          {this.state.loading && <Loading />}
           <InfiniteScroll
             dataLength={this.state.articles.length}
             next={this.fetchMoreData}
