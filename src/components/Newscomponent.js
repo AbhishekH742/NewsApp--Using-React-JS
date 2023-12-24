@@ -5,13 +5,18 @@ import PropTypes from 'prop-types';
 
 export class Newscomponent extends Component {
   articles = [];
-  constructor() {
-    super();
+
+  capitalizeString = (string) =>{
+    return string.charAt(0).toUpperCase()+string.slice(1);
+  }
+  constructor(props) {
+    super(props);
     this.state = {
       articles: this.articles,
       loading: false,
       page: 1
     }
+    document.title = `${this.capitalizeString(this.props.category)} - NewsPiece`;
   }
   static defaultProps = {
     country: "in",
@@ -93,7 +98,7 @@ export class Newscomponent extends Component {
   render() {
     return (
       <div className='container my-3'>
-        <h1 className='text-center my-5'>NewsPiece - Top Headings</h1>
+        <h1 className='text-center my-5'>NewsPiece - Top {this.capitalizeString(this.props.category)}  Headings</h1>
         {this.state.loading && <Loading />}
         <div className="row" >
           {!this.state.loading && this.state.articles.map((element) => {
