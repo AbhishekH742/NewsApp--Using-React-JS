@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 export class App extends Component {
   pageSize = 6;
-  apikey = process.env.REACT_APP_NEWS_PIECE_API_KEY;
+  apikey = '5ca7b939216440fbad3aaa5a1460f14a'
 state = {
   progress : 0
 }

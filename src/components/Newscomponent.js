@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import InfiniteScroll from "react-infinite-scroll-component";
 
 export class Newscomponent extends Component {
-  articles = [];
+  // articles = [ ];
 
   capitalizeString = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -13,7 +13,7 @@ export class Newscomponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      articles: this.articles,
+      articles: [],
       loading: false,
       page: 1,
       totalResults: 0
@@ -42,7 +42,7 @@ export class Newscomponent extends Component {
     let resolveData = await data.json();
     this.props.setProgress(70);
 
-    // console.log(resolveData);
+    console.log(resolveData);
     this.setState({
       articles: resolveData.articles,
       totalResults: resolveData.totalResults,
@@ -64,7 +64,7 @@ export class Newscomponent extends Component {
     //   totalResults: resolveData.totalResults,
     //   loading: false
     // });
-    this.updateNews();
+   await this.updateNews();
   }
 
   handlePrevPage = async () => {
@@ -104,18 +104,29 @@ export class Newscomponent extends Component {
   }
 
   fetchMoreData = async () => {
-    this.setState({ page: this.state.page + 1 });
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apikey}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
-    this.setState({ loading: true });
-    let data = await fetch(url);
-    let resolveData = await data.json();
+    // Increment the page before making the API call
+    const nextPage = this.state.page + 1;
     
-    this.setState({
-      articles: this.state.articles.concat(resolveData.articles),
-      totalResults: resolveData.totalResults,
-      loading: false
-    });
+    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apikey}&page=${nextPage}&pageSize=${this.props.pageSize}`;
+  
+    this.setState({ loading: true });
+  
+    try {
+      let data = await fetch(url);
+      let resolveData = await data.json();
+  
+      this.setState((prevState) => ({
+        articles: [...prevState.articles, ...resolveData.articles],
+        totalResults: resolveData.totalResults,
+        loading: false,
+        page: nextPage,
+      }));
+    } catch (error) {
+      console.error("Error fetching more data:", error);
+      this.setState({ loading: false });
+    }
   }
+  
 
 
   render() {
